@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="member">
+   <select id="selectUserById" resultType="member">
+        <![CDATA[
+            SELECT
+                *
+            FROM
+                GolforyouMemberNEW
+            WHERE
+                username=#{username}
+        ]]>
+    </select>
+
+    <!--com.golforyou.config.auth.PrincipalDetails  -->
+    
+		<select id="member_read" parameterType="member" resultType="member"> 	 
+ 	 		select * from GolforyouMemberNEW where username=#{username,jdbcType=VARCHAR} and m_state=1
+ 	 	</select>
+ 	 	
+ 	 	<insert id="member_in">
+ 		 	insert into GolforyouMemberNEW (m_no,username,password,m_phone,m_email,m_gender,m_date,m_state,salt)
+ 		 	values (m_golf_seq.nextval,#{username,jdbcType=VARCHAR},#{password,jdbcType=VARCHAR},#{m_phone},#{m_email},#{m_gender},sysdate,1,#{salt})
+ 	 	</insert>
+ 	 	
+ 	 	<select id="id_check" parameterType="member" resultType="member">
+ 	 		select * from GolforyouMemberNEW where username=#{username,jdbcType=VARCHAR}
+ 	 	</select>
+ 	 	
+ 	 	<select id="salt_check" resultType="String">
+ 	 		select salt from GolforyouMemberNEW where username=#{username,jdbcType=VARCHAR}
+ 	 	</select>
+ 	 	
+ 	 	<!-- 회원 정보 수정 -->
+ 	 	<update id="update_member">
+ 	 		update GolforyouMemberNEW set m_phone=#{m_phone}, m_addr=#{m_addr}, m_email=#{m_email}, m_file=#{m_file} where username=#{username,jdbcType=VARCHAR}
+ 	 	</update>
+ 	 	
+ 	 	<update id="update_province">
+ 	 		update ranking set r_province=#{r_province} where r_id=#{r_id,jdbcType=VARCHAR}
+ 	 	</update>
+ 	 	
+ 	 	<!-- 회원 탈퇴 기능 -->
+ 	 	<update id="withdrawal">
+ 	 		update GolforyouMemberNEW set m_delcont=#{m_delcont}, m_deldate=sysdate, m_state=2 where username=#{username,jdbcType=VARCHAR}
+ 	 	</update>
+ 	 	
+ 	 	 <select id="getMember" resultType="member">
+ 	 		select * from GolforyouMemberNEW where username=#{username,jdbcType=VARCHAR}
+ 	 	</select>
+ 	 	
+ 	 	
+</mapper>
